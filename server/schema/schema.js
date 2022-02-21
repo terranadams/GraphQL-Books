@@ -1,7 +1,7 @@
 const graphql = require("graphql");
 const _ = require("lodash");
-const Book = require("../models/book");
-const Author = require("../models/author");
+const Book = require("../models/book"); // This Book model is how we interact with the Book collection
+const Author = require("../models/author"); // This Author model is how we interact with the Author collection
 
 const {
   GraphQLObjectType,
@@ -22,8 +22,8 @@ const BookType = new GraphQLObjectType({
     author: {
       type: AuthorType,
       resolve(parent, args) {
-        // console.log(parent);
         // return _.find(authors, { id: parent.authorId });
+        return Author.findById(parent.authorId)
       },
     },
   }),
@@ -39,6 +39,7 @@ const AuthorType = new GraphQLObjectType({
       type: new GraphQLList(BookType),
       resolve(parent, args) {
         // return _.filter(books, { authorId: parent.id });
+        return Book.find({authorId: parent.id})
       },
     },
   }),
@@ -54,12 +55,14 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         // code to get data from db / other source
         // return _.find(books, { id: args.id }); // we use lodash to find the specific book in the books array quickly, and return it within the resolve function
+        return Book.findById(args.id)
       },
     },
     books: {
       type: new GraphQLList(BookType),
       resolve(parent, args) {
         // return books
+        return Book.find({}) // When we leave the object passed in empty, it returns all docs in that collection
       },
     },
     author: {
@@ -67,12 +70,14 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         // return _.find(authors, { id: args.id });
+        return Author.findById(args.id)
       },
     },
     authors: {
       type: new GraphQLList(AuthorType),
       resolve(parent, args) {
         // return authors;
+        return Author.find({}) // When we leave the object passed in empty, it returns all docs in that collection
       },
     },
   },
@@ -109,6 +114,7 @@ const Mutation = new GraphQLObjectType({
           authorId: args.authorId
         });
         return book.save(); // This here is the power of Mongoose
+        // the 'return' has nothing to do with mongoose, the resolve function in graphql always needs a return statement
       },
     }
   },
