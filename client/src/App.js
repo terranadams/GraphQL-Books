@@ -10,7 +10,7 @@ import {
 // apollo client setup
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
-  // cache: new InMemoryCache() //  Apollo Client uses this to cache query results after fetching them.
+  cache: new InMemoryCache() //  Apollo Client uses this to cache query results after fetching them.
 });
 
 function App() {
