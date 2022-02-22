@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
-import { GET_AUTHORS_QUERY } from "../queries/queries";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_AUTHORS_QUERY, ADD_BOOK_MUTATION } from "../queries/queries";
 
 const AddBook = () => {
-  const { loading, error, data } = useQuery(GET_AUTHORS_QUERY); // this hook is EVERYTHING
+  const authorsHook = useQuery(GET_AUTHORS_QUERY); //const { loading, error, data } = useQuery(GET_AUTHORS_QUERY)
+  const [addBook, addBookHook] = useMutation(ADD_BOOK_MUTATION); // const [addBook, { data, loading, error }] = useMutation(ADD_BOOK_MUTATION);
   const [name, setName] = useState("");
   const [genre, setGenre] = useState("");
   const [authorId, setAuthorId] = useState("No author selected");
 
   const displayAuthors = () => {
-    if (loading) return <option disabled>Loading Authors...</option>;
-    if (error) return <option disabled>Error :(</option>;
+    if (authorsHook.loading) return <option disabled>Loading Authors...</option>;
+    if (authorsHook.error) return <option disabled>Error :(</option>;
     else {
-      return data.authors.map((author) => {
+      return authorsHook.data.authors.map((author) => {
         return (
           <option key={author.id} value={author.id}>
             {author.name}
@@ -24,7 +25,8 @@ const AddBook = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    console.log(name, genre, authorId);
+    addBook({variables: {name, genre, authorId}})
+    console.log('Book added!! ', name, genre, authorId)
   };
 
   return (
