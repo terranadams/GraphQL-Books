@@ -1,15 +1,8 @@
 import React from "react";
-import { gql, useQuery } from "@apollo/client";
-// import { graphql } from "graphql";
+import { useQuery } from "@apollo/client";
+import { GET_BOOKS_QUERY } from "../queries/queries";
 
-const GET_BOOKS_QUERY = gql`
-  {
-    books {
-      name
-      id
-    }
-  }
-`;
+
 
 const BookList = (props) => {
   const { loading, error, data } = useQuery(GET_BOOKS_QUERY); // this hook is EVERYTHING
@@ -26,7 +19,7 @@ const BookList = (props) => {
 
   return (
     <div>
-      {console.log(data)}
+      {/* {console.log(data)} */}
       <ul id="book-list">
         {displayBooks()} {/* this function must be called in forder for it to work */}
       </ul>
