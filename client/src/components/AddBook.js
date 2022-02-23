@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_AUTHORS_QUERY, ADD_BOOK_MUTATION } from "../queries/queries";
+import {
+  GET_AUTHORS_QUERY,
+  ADD_BOOK_MUTATION,
+  GET_BOOKS_QUERY,
+} from "../queries/queries";
 
 const AddBook = () => {
   const authorsHook = useQuery(GET_AUTHORS_QUERY); //const { loading, error, data } = useQuery(GET_AUTHORS_QUERY)
@@ -10,7 +14,8 @@ const AddBook = () => {
   const [authorId, setAuthorId] = useState("No author selected");
 
   const displayAuthors = () => {
-    if (authorsHook.loading) return <option disabled>Loading Authors...</option>;
+    if (authorsHook.loading)
+      return <option disabled>Loading Authors...</option>;
     if (authorsHook.error) return <option disabled>Error :(</option>;
     else {
       return authorsHook.data.authors.map((author) => {
@@ -25,8 +30,11 @@ const AddBook = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    addBook({variables: {name, genre, authorId}})
-    console.log('Book added!! ', name, genre, authorId)
+    addBook({
+      variables: { name, genre, authorId },
+      refetchQueries: [{ query: GET_BOOKS_QUERY }],
+    });
+    console.log("Book added!! ", name, genre, authorId);
   };
 
   return (
@@ -43,7 +51,10 @@ const AddBook = () => {
 
       <div className="field">
         <label>Author:</label>
-        <select defaultValue={authorId} onChange={(e) => setAuthorId(e.target.value)}>
+        <select
+          defaultValue={authorId}
+          onChange={(e) => setAuthorId(e.target.value)}
+        >
           <option hidden>Select Author</option>
           {displayAuthors()}
         </select>
