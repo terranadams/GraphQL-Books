@@ -24,15 +24,21 @@ const BookDetails = (props) => {
 const displayBookDetails = () => {
     if (getBookHook.data) {
         let book = getBookHook.data.book
-        return console.log(book?.name)
-        // return (
-        //     <div>
-        //         <h2>{book.name}</h2>
-        //         <p>{book.genre}</p>
-        //         <p>{book.author.name}</p>
-        //     </div>
-        // )
-    }
+        // return console.log(book?.name)
+        return (
+            <div id="book-details">
+                <h2>{book?.name}</h2>
+                <p>Genre: {book?.genre}</p>
+                <p>Written by: {book?.author.name}</p>
+                <p>All books written by this author:</p>
+                <ul className='other-books'>
+                    {book?.author.books.map(item => {
+                        return <li key={item.id}>{item.name}</li>
+                    })}
+                </ul>
+            </div>
+        )
+    } 
 }
 
   return (
