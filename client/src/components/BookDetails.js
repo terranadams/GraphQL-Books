@@ -3,23 +3,12 @@ import { useQuery } from "@apollo/client";
 import { GET_BOOK_QUERY } from "../queries/queries";
 
 const BookDetails = (props) => {
+
+  // This component doesn't render unless a book is selected in the BookList component
+
   const getBookHook = useQuery(GET_BOOK_QUERY, {
     variables: {id: props.bookId},
   }); //const { loading, error, data } = useQuery(GET_BOOK_QUERY)
-
-//   const displayBookDetails = () => {
-//     let {book} = getBookHook.data
-//     if (book) {
-//         return (
-//             <div>
-//                 <h2>{book.name}</h2>
-//                 <p>{book.genre}</p>
-//                 <p>{book.author.name}</p>
-//             </div>
-//         )
-//     }
-     
-//   };
 
 const displayBookDetails = () => {
     if (getBookHook.data) {

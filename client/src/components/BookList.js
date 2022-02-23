@@ -4,7 +4,10 @@ import { GET_BOOKS_QUERY } from "../queries/queries";
 import BookDetails from "./BookDetails";
 
 const BookList = (props) => {
-  const { loading, error, data } = useQuery(GET_BOOKS_QUERY); // this hook is EVERYTHING
+
+  // The query below is ran as soon as the component mounts
+
+  const { loading, error, data } = useQuery(GET_BOOKS_QUERY); 
 
   const [selected, setSelected] = useState(null);
 
@@ -22,7 +25,7 @@ const BookList = (props) => {
     }
   };
 
-  const displayBookDetails = () => {
+  const displayBookDetails = () => { // this function must be called in the return statement for anything in this function to show
       if (!selected) return <h4>Select a book :)</h4>
       else return <BookDetails bookId={selected} />
   }
@@ -31,8 +34,7 @@ const BookList = (props) => {
     <div>
       {/* {console.log(data)} */}
       <ul id="book-list">
-        {displayBooks()}
-        {/* this function must be called in forder for it to work */}
+        {displayBooks()} {/* These functions need to be called, not referred */}
       </ul>
       {displayBookDetails()}
     </div>
